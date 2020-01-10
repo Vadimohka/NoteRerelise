@@ -62,5 +62,22 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
     private void init(SQLiteDatabase db) throws InterruptedException {
         insertNote(db, "Part 1", "Recreate project for fix bugs", "Begin");
         TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 2", "Transfer sortNotes from Fragment to NoteAdapter", "Begin");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 3", "Fix new bug with null pointer", "Begin");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 4", "2.15 AM. I um hungry. The stoves don't work. ", "Middle");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 5", "3.00 AM. New bug with onCreate when change orientation. ", "Middle");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 6", "3.40 AM. Bug fixed, i don`t now how. ", "Middle");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 7", "4.00 AM. I understand how it`s work and fixed new bugs", "End");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 8", "4.20 AM. I tested app 20 minutes. My friends tested app. i thing god see that how i tested app", "End");
+        TimeUnit.SECONDS.sleep(1);
+        insertNote(db, "Part 9", "4.30 AM. It`s last message. I do last tests and commit app", "End");
+        TimeUnit.SECONDS.sleep(1);
+
     }
 }

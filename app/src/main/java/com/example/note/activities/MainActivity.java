@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.note.enums.Sorting;
+import com.example.note.Sorting;
 import com.example.note.fragments.SortFindInterface;
 import com.example.note.models.Note;
 import com.example.note.R;

@@ -1,4 +1,4 @@
-package com.example.note.enums;
+package com.example.note;
 
 public enum Sorting {
     LastAdded,

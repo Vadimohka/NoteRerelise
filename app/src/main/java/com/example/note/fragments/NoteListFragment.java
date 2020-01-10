@@ -11,19 +11,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.example.note.R;
-import com.example.note.enums.Sorting;
+import com.example.note.Sorting;
 import com.example.note.activities.NoteActivity;
 import com.example.note.adapters.NoteAdapter;
 import com.example.note.adapters.NotesDatabaseAdapter;
 import com.example.note.models.Note;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-public class NoteListFragment extends Fragment
-        implements SortFindInterface {
+public class NoteListFragment extends Fragment implements SortFindInterface {
 
     private List<Note> notes = new ArrayList<>();
     private AdapterView notesListView;
@@ -31,11 +27,21 @@ public class NoteListFragment extends Fragment
     private Sorting sortType = Sorting.LastAdded;
     private String tagForSearching = "";
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        NotesDatabaseAdapter dbAdapter = new NotesDatabaseAdapter(getContext());
+        dbAdapter.open();
+        notes = dbAdapter.getNotes();
+        if(!tagForSearching.equals(""))
+            filterNotesByTag();
+        noteAdapter = new NoteAdapter(getContext(), R.layout.note, notes);
+        SortNotes(sortType);
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
         notesListView = view.findViewById(R.id.notesList);
+
 
         notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,22 +59,23 @@ public class NoteListFragment extends Fragment
         super.onResume();
         NotesDatabaseAdapter dbAdapter = new NotesDatabaseAdapter(getContext());
         dbAdapter.open();
-
         notes = dbAdapter.getNotes();
-        sortNotes();
         if(!tagForSearching.equals(""))
             filterNotesByTag();
-
         noteAdapter = new NoteAdapter(getContext(), R.layout.note, notes);
+        SortNotes(sortType);
+
         notesListView = getView().findViewById(R.id.notesList);
         notesListView.setAdapter(noteAdapter);
+
         dbAdapter.close();
     }
 
     @Override
     public void SortNotes (Sorting sortType) {
-        this.sortType = sortType;
-        sortNotes();
+        if (sortType == null)
+            sortType = Sorting.LastAdded;
+        noteAdapter.sortNotes(sortType);
         noteAdapter.notifyDataSetChanged();
     }
 
@@ -85,53 +92,9 @@ public class NoteListFragment extends Fragment
             noteAdapter.notifyDataSetChanged();
     }
 
-    private void sortNotes() {
-        switch (sortType) {
-            case LastAdded:
-            {
-
-                notes.sort(new Comparator<Note>() {
-                    @Override
-                    public int compare(Note o1, Note o2) {
-                        return o2.getDate().compareTo(o1.getDate());
-                    }
-                });
-            }
-            break;
-            case FirstAdded:
-                notes.sort(new Comparator<Note>() {
-                    @Override
-                    public int compare(Note o1, Note o2) {
-                        return o2.getDate().compareTo(o1.getDate());
-                    }
-                });
-                Collections.reverse(notes);
-                break;
-            case TitleAsc:
-                notes.sort(new Comparator<Note>() {
-                    @Override
-                    public int compare(Note o1, Note o2) {
-                        return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
-                    }
-                });
-                break;
-            case TitleDesc:
-            {
-                notes.sort(new Comparator<Note>() {
-                    @Override
-                    public int compare(Note o1, Note o2) {
-                        return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
-                    }
-                });
-                Collections.reverse(notes);
-            }
-            break;
-        }
-    }
-
-    private void filterNotesByTag() {
+    public void filterNotesByTag() {
         if (tagForSearching.equals("")) {
-            sortNotes();
+            SortNotes(sortType);
             return;
         }
         List<Note> filteredNotes = new ArrayList<>();
@@ -141,6 +104,6 @@ public class NoteListFragment extends Fragment
         }
         notes.clear();
         notes.addAll(filteredNotes);
-        sortNotes();
+        SortNotes(sortType);
     }
 }
