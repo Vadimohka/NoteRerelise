@@ -64,10 +64,8 @@ public class NoteListFragment extends Fragment implements SortFindInterface {
             filterNotesByTag();
         noteAdapter = new NoteAdapter(getContext(), R.layout.note, notes);
         SortNotes(sortType);
-
         notesListView = getView().findViewById(R.id.notesList);
         notesListView.setAdapter(noteAdapter);
-
         dbAdapter.close();
     }
 
